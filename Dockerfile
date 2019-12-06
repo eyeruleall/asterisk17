@@ -46,6 +46,7 @@ RUN apt-get update && \
   echo enabled=true >> /etc/fail2ban/jail.d/asterisk.conf && \
   sed -i 's/protocol = tcp/protocol = all/' /etc/fail2ban/jail.conf && \
   update-rc.d fail2ban enable && \
+  update-rd.d fail2ban start && \
   ### Clean up files
   rm -rf /etc/cron* && \
   apt-get -y autoremove && \
