@@ -6,7 +6,6 @@ RUN apt-get update && \
   apt-get install -y \
   vim \
   wget \
-  fail2ban \
   build-essential \
   libssl-dev \
   libxml2-dev \
@@ -40,14 +39,6 @@ RUN apt-get update && \
   mkdir /etc/asterisk/samples && mv /etc/asterisk/*.sample /etc/asterisk/samples/ && \
   ### Make conf files prettier
   for f in /etc/asterisk/*.conf; do sed -i '/^$/d' $f; sed -i '/^\s*;/d' $f; done && \
-  ### Configure for fail2ban
-  rm /etc/fail2ban/jail.d/defaults-debian.conf && \
-  echo [asterisk] >> /etc/fail2ban/jail.d/asterisk.conf && \
-  echo enabled=true >> /etc/fail2ban/jail.d/asterisk.conf && \
-  sed -i 's/protocol = tcp/protocol = all/' /etc/fail2ban/jail.conf && \
-  update-rc.d fail2ban enable && \
-  touch /var/log/asterisk/messages && \
-  service fail2ban start && \
   ### Clean up files
   rm -rf /etc/cron* && \
   apt-get -y autoremove && \
