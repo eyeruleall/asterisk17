@@ -40,7 +40,6 @@ RUN apt-get update && \
   ### Make conf files prettier
   for f in /etc/asterisk/*.conf; do sed -i '/^$/d' $f; sed -i '/^\s*;/d' $f; done && \
   ### Clean up files
-  rm -rf /etc/cron* && \
   apt-get -y autoremove && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
