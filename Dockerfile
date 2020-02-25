@@ -6,9 +6,15 @@ WORKDIR /usr/src
 RUN wget https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-17-current.tar.gz
 RUN tar xvzf asterisk-17-current.tar.gz && rm asterisk-17-current.tar.gz
 WORKDIR asterisk-17.2.0
+RUN echo y | ./contrib/scripts/install_prereq install && echo y | ./contrib/scripts/get_mp3_source.sh
 RUN ./configure
 RUN make menuselect.makeopts
-RUN menuselect/menuselect --disable BUILD_NATIVE --enable CORE-SOUNDS-EN-ALAW menuselect.makeopts
+RUN menuselect/menuselect --disable BUILD_NATIVE \
+  --enable format_mp3 \
+  --disable-category MENUSELECT_CORE_SOUNDS \
+  --disable-category MENUSELECT_MOH \
+  --disable-category MENUSELECT_EXTRA_SOUNDS \
+  menuselect.makeopts
 RUN make && make install && make samples && ldconfig && \
   ### Backup original conf files
   for f in /etc/asterisk/*.conf; do cp -- "$f" "${f%.conf}.sample"; done && \
